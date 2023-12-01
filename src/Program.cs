@@ -15,7 +15,7 @@ namespace NodeBeautify
         /// </summary>
         private static readonly Dictionary<string, (float, float)> FIXED_SIZE = new(){
             {
-                "CLIPTextEncode", (420.0f, 160.0f)
+                "CLIPTextEncode", (400.0f, 150.0f)
             }
         };
 
@@ -60,64 +60,81 @@ namespace NodeBeautify
             return (float)value - ((float)value % GRID_SIZE);
         }
 
+        private static void FixNodes(JObject data)
+        {
+            var nodes = (JArray)data["nodes"];
+
+            // Doing try-catch cause somehow the value can be either array or dictionary...
+            foreach (JObject node in nodes)
+            {
+                try
+                {
+                    JArray pos = (JArray)node["pos"];
+                    pos[0] = Round(pos[0]);
+                    pos[1] = Round(pos[1]);
+                }
+                catch (InvalidCastException)
+                {
+                    JObject pos = (JObject)node["pos"];
+                    pos["0"] = Round(pos["0"]);
+                    pos["1"] = Round(pos["1"]);
+                }
+
+                string key = (string)node["type"];
+
+                try
+                {
+                    JObject size = (JObject)node["size"];
+
+                    if (FIXED_SIZE.ContainsKey(key))
+                    {
+                        size["0"] = FIXED_SIZE[key].Item1;
+                        size["1"] = FIXED_SIZE[key].Item2;
+                    }
+                    else
+                    {
+                        size["0"] = Round(size["0"]);
+                        size["1"] = Round(size["1"]);
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    JArray size = (JArray)node["size"];
+                    if (FIXED_SIZE.ContainsKey(key))
+                    {
+                        size[0] = FIXED_SIZE[key].Item1;
+                        size[1] = FIXED_SIZE[key].Item2;
+                    }
+                    else
+                    {
+                        size[0] = Round(size[0]);
+                        size[1] = Round(size[0]);
+                    }
+                }
+            }
+        }
+
+        private static void FixGroups(JObject data)
+        {
+            var groups = (JArray)data["groups"];
+
+            foreach (JObject group in groups)
+            {
+                JArray bound = (JArray)group["bounding"];
+                for (int edge = 0; edge < 4; edge++)
+                    bound[edge] = Round(bound[edge]);
+            }
+        }
+
         private static void Process(string path)
         {
             string jsonContent = File.ReadAllText(path).Trim();
+            var data = JsonConvert.DeserializeObject<JObject>(jsonContent);
 
             try
             {
-                var data = JsonConvert.DeserializeObject<JObject>(jsonContent);
-                var nodes = (JArray)data["nodes"];
-
-                // Doing try-catch cause somehow the value can be either array or dictionary...
-                foreach (JObject node in nodes)
-                {
-                    try
-                    {
-                        JArray pos = (JArray)node["pos"];
-                        pos[0] = Round(pos[0]);
-                        pos[1] = Round(pos[1]);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        JObject pos = (JObject)node["pos"];
-                        pos["0"] = Round(pos["0"]);
-                        pos["1"] = Round(pos["1"]);
-                    }
-
-                    string key = (string)node["type"];
-
-                    try
-                    {
-                        JObject size = (JObject)node["size"];
-
-                        if (FIXED_SIZE.ContainsKey(key))
-                        {
-                            size["0"] = FIXED_SIZE[key].Item1;
-                            size["1"] = FIXED_SIZE[key].Item2;
-                        }
-                        else
-                        {
-                            size["0"] = Round(size["0"]);
-                            size["1"] = Round(size["1"]);
-                        }
-                    }
-                    catch (InvalidCastException)
-                    {
-                        JArray size = (JArray)node["size"];
-                        if (FIXED_SIZE.ContainsKey(key))
-                        {
-                            size[0] = FIXED_SIZE[key].Item1;
-                            size[1] = FIXED_SIZE[key].Item2;
-                        }
-                        else
-                        {
-                            size[0] = Round(size[0]);
-                            size[1] = Round(size[0]);
-                        }
-                    }
-                }
-
+                FixNodes(data);
+                FixGroups(data);
                 File.WriteAllText(path, JsonConvert.SerializeObject(data));
             }
             catch (NullReferenceException)
