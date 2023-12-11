@@ -1,5 +1,5 @@
 ﻿# ComfyUI Node Beautify
-A simple Extension to format the workflow
+This is an Extension for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which helps formatting the workflow.
 
 ## Features
 Round the **size** and the **position** of each node and group in a workflow by a preset value
