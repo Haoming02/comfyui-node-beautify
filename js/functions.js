@@ -11,10 +11,9 @@ export function Process(graph) {
             node["size"] = FIXED_SIZE[node["type"]];
         }
 
-        ["pos", "size"].forEach((mode) => {
-            [0, 1].forEach((index) => {
-                node[mode][index] = round(node[mode][index]);
-            });
+        ["pos", "size"].forEach((prop) => {
+            node[prop][0] = round(node[prop][0]);
+            node[prop][1] = round(node[prop][1]);
         });
 
     });
