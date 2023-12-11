@@ -1,0 +1,18 @@
+import { app } from "../../scripts/app.js";
+import { Process } from "./functions.js";
+
+app.registerExtension({
+	name: "Comfy.NodeBeautify",
+	async setup() {
+		const menu = document.querySelector(".comfy-menu");
+
+		const beautifyButton = document.createElement("button");
+		beautifyButton.textContent = "Beautify";
+		beautifyButton.addEventListener("click", () => {
+			app.loadGraphData(Process(app.graph.serialize()));
+		});
+
+		const refreshButton = document.getElementById("comfy-refresh-button");
+		menu.insertBefore(beautifyButton, refreshButton);
+	}
+});
