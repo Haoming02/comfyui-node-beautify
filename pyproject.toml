@@ -1,0 +1,13 @@
+[project]
+name = "comfyui-node-beautify"
+description = "Adds a button that formats the workflow"
+version = "1.0.0"
+license = "MIT"
+
+[project.urls]
+Repository = "https://github.com/Haoming02/comfyui-node-beautify"
+
+[tool.comfy]
+PublisherId = "haoming02"
+DisplayName = "Node Beautify"
+Icon = ""
