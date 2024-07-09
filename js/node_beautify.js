@@ -1,6 +1,13 @@
 import { app } from "../../scripts/app.js";
 import { Process } from "./functions.js";
 
+app.ui.settings.addSetting({
+	id: "beautify.GridSize",
+	name: "Beautify Grid Size",
+	type: "number",
+	defaultValue: 10,
+});
+
 app.registerExtension({
 	name: "Comfy.NodeBeautify",
 	async setup() {
