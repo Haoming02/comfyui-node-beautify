@@ -2,7 +2,7 @@
 name = "comfyui-node-beautify"
 description = "Adds a button that formats the workflow"
 version = "1.0.0"
-license = "MIT"
+license = { text = "MIT License" }
 
 [project.urls]
 Repository = "https://github.com/Haoming02/comfyui-node-beautify"
