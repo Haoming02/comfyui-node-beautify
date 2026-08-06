@@ -1,5 +1,10 @@
 ﻿# ComfyUI Node Beautify
-This is an Extension for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which helps formatting the workflow.
+This is an Extension for [ComfyUI](https://github.com/Comfy-Org/ComfyUI), which adds a `Beautify` button that formats the workflow
 
-## Feature
-This will add a button, **Beautify**, to the menu that rounds the **size** and **position** of each **node** and **group** in a workflow using the set value
+### Features
+- Round the `size` and `position` of each **Node**
+- Resize each **Group** with proper `margin` for **Node**s within
+- Reset the graph `position` to origin `(0, 0)`
+
+## Settings
+- Adjust the rounding size
